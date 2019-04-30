@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Back Stack</string>
+    <string name="button_second">Start Second</string>
+    <string name="button_first">Start First</string>
+    <string name="button_new">Start New Task</string>
+
+</resources>
