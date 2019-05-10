@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FragmentDialog</string>
+    <string name="alert_exit">Alert Exit</string>
+    <string name="exit_question">Do you really want to exit?</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
+</resources>
