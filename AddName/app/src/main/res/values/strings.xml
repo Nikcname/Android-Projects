@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AddName</string>
+    <string name="str_calculate">Calculate</string>
+    <string name="str_give_name">Give name</string>
+    <string name="str_add">Add</string>
+    <string name="str_name">Name</string>
+    <string name="str_surname">Surname</string>
+    <string name="str_show_name">Show Name</string>
+</resources>
