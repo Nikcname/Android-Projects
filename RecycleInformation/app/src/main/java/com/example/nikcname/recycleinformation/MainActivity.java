@@ -5,65 +5,48 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.Moshi;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
-    private List<Student> students;
+    private StudentAdapter studentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        students = new ArrayList<>();
         recyclerView = findViewById(R.id.recycleInfoView);
         myLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(myLayoutManager);
-        myAdapter = new InfoAdapter(students);
+
+
+        String jsonString = "{\"students\":[{\"aGrade\":8.5,\"aName\":\"John\",\"aPhoneNumber\":5550123,\"aSurname\":\"Lawless\",\"anAge\":45},{\"aGrade\":7.9,\"aName\":\"Kara\",\"aPhoneNumber\":4541123,\"aSurname\":\"Gold\",\"anAge\":19},{\"aGrade\":6.1,\"aName\":\"Lancer\",\"aPhoneNumber\":7845466,\"aSurname\":\"Bow\",\"anAge\":28}]}";
+        Moshi moshi = new Moshi.Builder().build();
+        JsonAdapter<StudentAdapter> jsonAdapter = moshi.adapter(StudentAdapter.class);
+
+        try {
+            studentAdapter = jsonAdapter.fromJson(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        myAdapter = new InfoAdapter(studentAdapter.getStudents());
         recyclerView.setAdapter(myAdapter);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        String jsonSt = "{\"name\":\"Farrukh\",\"surname\":\"Nabiyev\",\"phone\":5578211,\"grade\":82.4,\"age\":22}";
-
-        Gson gson = new Gson();
-
-        Student student1 = gson.fromJson(jsonSt, Student.class);
-
-        try {
-            JSONObject obj = new JSONObject(jsonSt);
-
-            for (int i = 0; i < obj.length(); i++){
-
-                Log.d("tedd", String.valueOf(obj.names().get(i)));
-            }
-
-
-        } catch (JSONException e) {
-            Log.e("tedd", e.toString());
-        }
-
-        students.add(new Student("Farrukh", "Nabiyev",
-                5578211, 82.4, 22));
-
-        students.add(new Student("Cavid", "Eliyev",
-                4791544, 74.4, 22));
 
         ((InfoAdapter) myAdapter).setOnItemClickListener(new InfoAdapter.Click() {
             @Override
@@ -73,11 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
                 Bundle bundle = new Bundle();
 
-                bundle.putSerializable("info", students.get(position));
+                bundle.putSerializable("info", studentAdapter.getStudents().get(position));
 
                 intent.putExtras(bundle);
 
                 startActivity(intent);
+
+                myAdapter.notifyDataSetChanged();
 
             }
         });
