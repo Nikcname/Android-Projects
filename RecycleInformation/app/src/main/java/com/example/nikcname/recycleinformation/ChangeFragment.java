@@ -59,7 +59,6 @@ public class ChangeFragment extends DialogFragment {
         buttonCancel.setOnClickListener(e->{
             dismiss();
         });
-
     }
 
     interface ClickFeedback{

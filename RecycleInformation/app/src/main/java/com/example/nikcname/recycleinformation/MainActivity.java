@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         myLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(myLayoutManager);
 
-
         String jsonString = "{\"students\":[{\"aGrade\":8.5,\"aName\":\"John\",\"aPhoneNumber\":5550123,\"aSurname\":\"Lawless\",\"anAge\":45},{\"aGrade\":7.9,\"aName\":\"Kara\",\"aPhoneNumber\":4541123,\"aSurname\":\"Gold\",\"anAge\":19},{\"aGrade\":6.1,\"aName\":\"Lancer\",\"aPhoneNumber\":7845466,\"aSurname\":\"Bow\",\"anAge\":28}]}";
         Moshi moshi = new Moshi.Builder().build();
         JsonAdapter<StudentAdapter> jsonAdapter = moshi.adapter(StudentAdapter.class);
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         myAdapter = new InfoAdapter(studentAdapter.getStudents());
         recyclerView.setAdapter(myAdapter);
-
     }
 
     @Override
@@ -69,41 +67,34 @@ public class MainActivity extends AppCompatActivity {
 
                 popupMenu = new PopupMenu(getApplicationContext(), view);
                 popupMenu.getMenuInflater().inflate(R.menu.popoupmenu, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(menuItem -> {
 
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem menuItem) {
+                    switch (menuItem.getTitle().toString()){
 
-                        switch (menuItem.getTitle().toString()){
-
-                            case "Delete":
-                                studentAdapter.getStudents().remove(position);
+                        case "Delete":
+                            studentAdapter.getStudents().remove(position);
+                            myAdapter.notifyDataSetChanged();
+                            break;
+                        case "Edit":
+                            DialogFragment fragmentChange = ChangeFragment.newInstance(
+                                    studentAdapter.getStudents().get(position).getaName(),
+                                    studentAdapter.getStudents().get(position).getaSurname()
+                            );
+                            ((ChangeFragment) fragmentChange).setOnClickListeners((newName, newSurname) -> {
+                                studentAdapter.getStudents().get(position).setaName(newName);
+                                studentAdapter.getStudents().get(position).setaSurname(newSurname);
                                 myAdapter.notifyDataSetChanged();
-                                break;
-                            case "Edit":
-                                DialogFragment fragmentChange = ChangeFragment.newInstance(
-                                        studentAdapter.getStudents().get(position).getaName(),
-                                        studentAdapter.getStudents().get(position).getaSurname()
-                                );
-                                ((ChangeFragment) fragmentChange).setOnClickListeners((newName, newSurname) -> {
-                                    studentAdapter.getStudents().get(position).setaName(newName);
-                                    studentAdapter.getStudents().get(position).setaSurname(newSurname);
-                                    myAdapter.notifyDataSetChanged();
-                                });
+                            });
 
-                                fragmentChange.show(getSupportFragmentManager(), "cng");
-                                break;
-                        }
-
-                        return true;
+                            fragmentChange.show(getSupportFragmentManager(), "cng");
+                            break;
                     }
+
+                    return true;
                 });
 
                 popupMenu.show();
-
             }
         });
-
     }
-
 }
