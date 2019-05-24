@@ -1,10 +1,15 @@
 package com.example.nikcname.recycleinformation;
 
 import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
@@ -17,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter myAdapter;
     private RecyclerView.LayoutManager myLayoutManager;
     private StudentAdapter studentAdapter;
+    private PopupMenu popupMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         myAdapter = new InfoAdapter(studentAdapter.getStudents());
         recyclerView.setAdapter(myAdapter);
 
@@ -51,21 +56,54 @@ public class MainActivity extends AppCompatActivity {
         ((InfoAdapter) myAdapter).setOnItemClickListener(new InfoAdapter.Click() {
             @Override
             public void onItemClick(int position) {
-
                 Intent intent = new Intent(getApplicationContext(), ExtendedInfoActivity.class);
-
                 Bundle bundle = new Bundle();
-
                 bundle.putSerializable("info", studentAdapter.getStudents().get(position));
-
                 intent.putExtras(bundle);
-
                 startActivity(intent);
-
                 myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onItemLongClick(final int position, View view) {
+
+                popupMenu = new PopupMenu(getApplicationContext(), view);
+                popupMenu.getMenuInflater().inflate(R.menu.popoupmenu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+
+                        switch (menuItem.getTitle().toString()){
+
+                            case "Delete":
+                                studentAdapter.getStudents().remove(position);
+                                myAdapter.notifyDataSetChanged();
+                                break;
+                            case "Edit":
+                                DialogFragment fragmentChange = ChangeFragment.newInstance(
+                                        studentAdapter.getStudents().get(position).getaName(),
+                                        studentAdapter.getStudents().get(position).getaSurname()
+                                );
+                                ((ChangeFragment) fragmentChange).setOnClickListeners((newName, newSurname) -> {
+                                    studentAdapter.getStudents().get(position).setaName(newName);
+                                    studentAdapter.getStudents().get(position).setaSurname(newSurname);
+                                    myAdapter.notifyDataSetChanged();
+                                });
+
+                                fragmentChange.show(getSupportFragmentManager(), "cng");
+                                break;
+                        }
+
+                        return true;
+                    }
+                });
+
+                popupMenu.show();
 
             }
         });
 
     }
+
 }

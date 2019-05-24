@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Recycle Information</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

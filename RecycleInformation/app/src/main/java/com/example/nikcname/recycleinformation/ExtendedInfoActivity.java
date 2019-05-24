@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 public class ExtendedInfoActivity extends AppCompatActivity {
 
     ImageView imageViewPhoto;
@@ -25,6 +27,7 @@ public class ExtendedInfoActivity extends AppCompatActivity {
         textViewAge = findViewById(R.id.textViewInfoAge);
         textViewGrade = findViewById(R.id.textViewInfoGrade);
         textViewPhone = findViewById(R.id.textViewInfoPhone);
+        imageViewPhoto = findViewById(R.id.imageViewPicture);
 
         student = (Student) getIntent().getExtras().get("info");
 
@@ -37,8 +40,12 @@ public class ExtendedInfoActivity extends AppCompatActivity {
         textViewName.setText(student.getaName());
         textViewSurname.setText(student.getaSurname());
         textViewPhone.setText(String.valueOf(student.getaPhoneNumber()));
-        System.out.println(student.getaPhoneNumber());
         textViewGrade.setText(String.valueOf(student.getaGrade()));
         textViewAge.setText(String.valueOf(student.getAnAge()));
+        Picasso.get()
+                .load("https://source.unsplash.com/random")
+                .resize(100, 100)
+                .centerCrop()
+                .into(imageViewPhoto);
     }
 }

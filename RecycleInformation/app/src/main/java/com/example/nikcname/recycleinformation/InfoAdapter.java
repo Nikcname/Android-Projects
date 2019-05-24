@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder> {
@@ -19,7 +23,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
         this.students = students;
     }
 
-    class InfoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class InfoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         TextView textViewName;
         TextView textViewSurname;
@@ -33,11 +37,19 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
             textViewSurname = itemView.findViewById(R.id.textViewSurname);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             clickListener.onItemClick(getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+
+            clickListener.onItemLongClick(getAdapterPosition(), view);
+            return true;
         }
     }
 
@@ -56,6 +68,11 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
         infoViewHolder.textViewName.setText(students.get(i).getaName());
         infoViewHolder.textViewSurname.setText(students.get(i).getaSurname());
+        Picasso.get()
+                .load("https://source.unsplash.com/random")
+                .resize(100, 100)
+                .centerCrop()
+                .into(infoViewHolder.imageViewPhoto);
 
     }
 
@@ -66,6 +83,7 @@ public class InfoAdapter extends RecyclerView.Adapter<InfoAdapter.InfoViewHolder
 
     interface Click{
         void onItemClick(int position);
+        void onItemLongClick(int position, View view);
     }
 
     void setOnItemClickListener(Click clickListener){
