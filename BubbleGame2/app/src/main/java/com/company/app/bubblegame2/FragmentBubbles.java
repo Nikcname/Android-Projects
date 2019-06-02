@@ -1,16 +1,14 @@
-package com.shirinov.joshgun.bubblegame2;
+package com.company.app.bubblegame2;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,9 +17,8 @@ public class FragmentBubbles extends Fragment {
 
 
     private ConstraintLayout constraintLayout;
-    private Timer timer;
-    int random;
     private CountInterface countInterface;
+    private Timer appearanceTimer;
 
 
     @Nullable
@@ -29,18 +26,15 @@ public class FragmentBubbles extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.bubbles_fragment, container, false);
-
-        constraintLayout  = (ConstraintLayout) view.findViewById(R.id.constraintDynamicBubbles);
-
-        timer=new Timer();
-
+        constraintLayout  = view.findViewById(R.id.constraintDynamicBubbles);
+        appearanceTimer = new Timer();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        appearanceTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
 
@@ -49,10 +43,13 @@ public class FragmentBubbles extends Fragment {
                     public void run() {
 
                         final Button buttonBubble = new Button(getContext());
+                        final int randomX = new Random().nextInt(((constraintLayout.getWidth()-150)) + 1);
+                        final int randomY = new Random().nextInt(((constraintLayout.getHeight()-150)) + 1);
+
                         buttonBubble.setText("");
                         buttonBubble.setLayoutParams(new ViewGroup.LayoutParams(150, 150));
-                        buttonBubble.setX(new Random().nextInt(((constraintLayout.getWidth()-150)) + 1));
-                        buttonBubble.setY(new Random().nextInt(((constraintLayout.getHeight()-150)) + 1));
+                        buttonBubble.setX(randomX);
+                        buttonBubble.setY(randomY);
                         buttonBubble.setBackground(getResources().getDrawable(R.drawable.button_style));
                         constraintLayout.addView(buttonBubble);
                         countInterface.countIncrease();
@@ -60,7 +57,6 @@ public class FragmentBubbles extends Fragment {
                         buttonBubble.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 constraintLayout.removeView(buttonBubble);
                                 countInterface.countDecrease();
                             }
@@ -77,7 +73,7 @@ public class FragmentBubbles extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        timer.cancel();
+        appearanceTimer.cancel();
     }
 
     public interface CountInterface{
@@ -87,6 +83,5 @@ public class FragmentBubbles extends Fragment {
 
     public void setOnCounter(CountInterface countInterface){
         this.countInterface = countInterface;
-
     }
 }

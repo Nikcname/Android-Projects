@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.shirinov.joshgun.bubblegame2"
+        applicationId "com.company.app.bubblegame2"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 1

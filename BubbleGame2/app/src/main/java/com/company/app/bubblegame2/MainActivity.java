@@ -1,4 +1,4 @@
-package com.shirinov.joshgun.bubblegame2;
+package com.company.app.bubblegame2;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,10 +9,10 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
-    private String TAG = "dddd";
+    private String TAG = "MainActivity";
     RecyclerView recyclerView;
-    RecyclerView.Adapter adapter;
-    RecyclerView.LayoutManager manager;
+    RecyclerView.Adapter recyclerAdapter;
+    RecyclerView.LayoutManager recyclerManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
 
-        manager = new LinearLayoutManager(this);
+        recyclerManager = new LinearLayoutManager(this);
 
-        recyclerView.setLayoutManager(manager);
+        recyclerView.setLayoutManager(recyclerManager);
 
-        adapter = new MyAdapter();
+        recyclerAdapter = new MyAdapter();
 
-        ((MyAdapter) adapter).setClickListener(new MyAdapter.OnItemClick() {
+        ((MyAdapter) recyclerAdapter).setClickListener(new MyAdapter.OnItemClick() {
             @Override
             public void onClicked(int level) {
 
@@ -51,16 +51,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-
-                Intent intent = new Intent(getApplicationContext(), SecondActivity.class);
-                intent.putExtra("limit", limit);
-                startActivity(intent);
+                Intent secondActivity = new Intent(getApplicationContext(), SecondActivity.class);
+                secondActivity.putExtra("limit", limit);
+                startActivity(secondActivity);
                 Log.d(TAG, String.valueOf(limit));
 
             }
         });
 
-        recyclerView.setAdapter(adapter);
-
+        recyclerView.setAdapter(recyclerAdapter);
     }
 }

@@ -1,4 +1,4 @@
-package com.shirinov.joshgun.bubblegame2;
+package com.company.app.bubblegame2;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -15,23 +15,18 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
-        FragmentBubbles fragment = new FragmentBubbles();
-        fragment.setOnCounter(new FragmentBubbles.CountInterface() {
+        FragmentBubbles fragmentBubbles = new FragmentBubbles();
+        fragmentBubbles.setOnCounter(new FragmentBubbles.CountInterface() {
             @Override
             public void countIncrease() {
                 counter++;
                 score++;
-//                Toast.makeText(getApplicationContext(),counter + " " + score,Toast.LENGTH_SHORT).show();
-
 
             }
 
             @Override
             public void countDecrease() {
                 counter--;
-//                Toast.makeText(getApplicationContext(), counter + " " + score, Toast.LENGTH_SHORT).show();
-
-
 
             }
         });
@@ -39,10 +34,8 @@ public class SecondActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentTransaction.add(R.id.bubbles_fragment_element, fragment);
+        fragmentTransaction.add(R.id.bubbles_fragment_element, fragmentBubbles);
         fragmentTransaction.commit();
-
-
     }
 
 

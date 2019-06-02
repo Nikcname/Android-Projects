@@ -1,4 +1,4 @@
-package com.shirinov.joshgun.bubblegame2;
+package com.company.app.bubblegame2;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
