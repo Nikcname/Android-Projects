@@ -52,9 +52,14 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Intent secondActivity = new Intent(getApplicationContext(), SecondActivity.class);
-                secondActivity.putExtra("limit", limit);
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("limit", limit);
+
+                secondActivity.putExtras(bundle);
+
                 startActivity(secondActivity);
-                Log.d(TAG, String.valueOf(limit));
+//                Log.d(TAG, String.valueOf(limit));
 
             }
         });
